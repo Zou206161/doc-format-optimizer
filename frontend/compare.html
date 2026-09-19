@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>格式对比</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: "SimSun", "宋体", serif; background: #f5f5f5; padding: 20px; }
+h1 { text-align: center; font-size: 18pt; font-family: "SimHei","黑体"; margin-bottom: 20px; }
+.container { display: flex; gap: 20px; max-width: 1400px; margin: 0 auto; }
+.panel { flex: 1; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.panel-header { padding: 12px 20px; color: white; font-size: 14pt; font-family: "SimHei","黑体"; }
+.panel-before .panel-header { background: #c0392b; }
+.panel-after .panel-header { background: #27ae60; }
+.panel-body { padding: 24px 30px; min-height: 600px; }
+
+/* Before document simulation */
+.before-doc { }
+.before-doc .b-title { font-size: 16pt; font-weight: bold; font-family: Arial, sans-serif; margin-bottom: 8px; }
+.before-doc .b-abs { font-size: 11pt; font-family: Arial, sans-serif; margin-bottom: 12px; }
+.before-doc .b-h1 { font-size: 14pt; font-weight: bold; font-family: Arial, sans-serif; margin: 12px 0 6px; }
+.before-doc .b-h2 { font-size: 12pt; font-weight: bold; font-family: Arial, sans-serif; margin: 10px 0 5px; }
+.before-doc .b-body { font-size: 11pt; font-family: Arial, sans-serif; line-height: 1.5; margin-bottom: 8px; }
+.before-doc .b-ref-head { font-size: 12pt; font-weight: bold; margin: 12px 0 6px; }
+.before-doc .b-ref { font-size: 11pt; margin-bottom: 4px; }
+
+.before-tag { display: inline-block; background: #ffe0e0; color: #c0392b; font-size: 9pt; padding: 1px 6px; border-radius: 3px; margin-left: 8px; }
+
+/* After document simulation */
+.after-doc { }
+.after-doc .a-title { font-size: 22pt; font-weight: bold; font-family: "SimHei","黑体"; text-align: center; margin-bottom: 12px; }
+.after-doc .a-toc-title { font-size: 14pt; font-weight: bold; font-family: "SimHei","黑体"; text-align: center; margin-bottom: 8px; border-bottom: 1px solid #333; padding-bottom: 4px; }
+.after-doc .a-toc { font-size: 10.5pt; font-family: "SimSun","宋体"; line-height: 1.8; margin-bottom: 16px; padding-left: 20px; }
+.after-doc .a-toc .dot { border-bottom: 1px dotted #999; display: inline-block; min-width: 200px; margin: 0 8px; vertical-align: bottom; }
+.after-doc .a-abs { font-size: 12pt; font-family: "SimSun","宋体"; line-height: 1.5; text-indent: 2em; text-align: justify; margin-bottom: 12px; }
+.after-doc .a-h1 { font-size: 14pt; font-weight: bold; font-family: "SimHei","黑体"; text-align: center; margin: 16px 0 8px; }
+.after-doc .a-h2 { font-size: 12pt; font-weight: bold; font-family: "SimHei","黑体"; margin: 12px 0 6px; }
+.after-doc .a-body { font-size: 12pt; font-family: "SimSun","宋体"; line-height: 1.5; text-indent: 2em; text-align: justify; margin-bottom: 8px; }
+.after-doc .a-ref-head { font-size: 14pt; font-weight: bold; font-family: "SimHei","黑体"; text-align: center; margin: 16px 0 8px; }
+.after-doc .a-ref { font-size: 10.5pt; font-family: "SimSun","宋体"; line-height: 1.5; margin-bottom: 4px; }
+
+.after-tag { display: inline-block; background: #e0f5e0; color: #27ae60; font-size: 9pt; padding: 1px 6px; border-radius: 3px; margin-left: 8px; }
+
+.page-num { text-align: center; font-size: 10pt; color: #999; margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<h1>文档格式优化 — 前后对比</h1>
+
+<div class="container">
+  <!-- ========== BEFORE ========== -->
+  <div class="panel panel-before">
+    <div class="panel-header">优化前（原始草稿）</div>
+    <div class="panel-body">
+      <div class="before-doc">
+        <div class="b-title">人工智能在日常生活领域的研究应用 <span class="before-tag">Arial 16pt 左对齐</span></div>
+        <div class="b-abs">摘要：本文探讨了人工智能技术在日常生活中的应用现状和发展趋势。比如说智能家居、自动驾驶、语音助手等领域都有了很大的进展。AI技术正在改变我们的生活方式。 <span class="before-tag">Arial 11pt 无缩进</span></div>
+        
+        <div class="b-h1">引言 <span class="before-tag">无标题样式 无编号</span></div>
+        <div class="b-body">人工智能（AI）是计算机科学的一个重要分支，它致力于研究开发能够模拟人类智能行为的系统。近年来，随着深度学习技术的突破，AI在日常生活中得应用越来越广泛。</div>
+        
+        <div class="b-h2">智能家居系统 <span class="before-tag">无编号</span></div>
+        <div class="b-body">智能家居是AI在日常生活中最常见的应用之一。通过语音识别和自然语言处理技术，用户可以用语音控制家里的灯光、空调、窗帘等设备。比如说我跟音箱说"把灯关了"，它就能听懂并执行。</div>
+        
+        <div class="b-h2">自动驾驶技术 <span class="before-tag">无编号</span></div>
+        <div class="b-body">自动驾驶是AI技术的集大成者，涉及计算机视觉、传感器融合、路径规划等多个领域。目前L3级别的自动驾驶已经在部分高端车型上实现量产。</div>
+        
+        <div class="b-ref-head">参考文献</div>
+        <div class="b-ref">[1] 张三. 人工智能导论[M]. 北京: 清华大学出版社 2023.</div>
+        <div class="b-ref">[2] 李四, 王五. 深度学习在语音识别中的应用[J]. 计算机科学 2024 51(3): 45-52.</div>
+        <div class="b-ref">[3] Johnson J, Zhang L. Autonomous Driving Systems[J]. IEEE Transactions on ITS, 2023, 24(5): 6789-6801.</div>
+        
+        <div style="margin-top: 30px; padding: 10px; background: #fff5f5; border: 1px solid #e8c0c0; border-radius: 4px;">
+          <div style="font-size: 10pt; color: #c0392b; font-weight: bold; margin-bottom: 6px;">问题汇总：</div>
+          <ul style="font-size: 10pt; color: #666; padding-left: 20px; line-height: 1.8;">
+            <li>字体混乱：中英文都用 Arial，未设宋体</li>
+            <li>字号不统一：11pt/12pt/14pt/16pt 混用</li>
+            <li>无标题样式：全部为 Normal，无法生成目录</li>
+            <li>无标题编号：缺少"一、""（一）"等层级编号</li>
+            <li>无目录：缺少自动生成的目录页</li>
+            <li>口语化："比如说"等非学术表达</li>
+            <li>错别字："得应用"应为"的应用"</li>
+            <li>参考文献格式不统一，缺少国标标识码</li>
+            <li>无首行缩进，行距不规范</li>
+            <li>无页码分节设置</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== AFTER ========== -->
+  <div class="panel panel-after">
+    <div class="panel-header">优化后（成品文档）</div>
+    <div class="panel-body">
+      <div class="after-doc">
+        <div class="a-title">人工智能在日常生活领域的研究应用 <span class="after-tag">黑体二号 居中</span></div>
+        
+        <div class="a-toc-title">目  录</div>
+        <div class="a-toc">
+          一、引言<span class="dot"></span>1</span><br>
+          （一）智能家居系统<span class="dot"></span>1</span><br>
+          （二）自动驾驶技术<span class="dot"></span>2</span><br>
+          参考文献<span class="dot"></span>3</span>
+        </div>
+        
+        <div class="a-abs">摘要：本文探讨了人工智能技术在日常生活中的应用现状和发展趋势。例如智能家居、自动驾驶、语音助手等领域均有了很大的进展。AI技术正在改变我们的生活方式。 <span class="after-tag">宋体小四 首行缩进</span></div>
+        
+        <div class="a-h1">一、引言 <span class="after-tag">Heading 1 自动编号</span></div>
+        <div class="a-body">人工智能（AI）是计算机科学的一个重要分支，它致力于研究开发能够模拟人类智能行为的系统。近年来，随着深度学习技术的突破，AI在生活中的应用越来越广泛。</div>
+        
+        <div class="a-h2">（一）智能家居系统 <span class="after-tag">Heading 2 自动编号</span></div>
+        <div class="a-body">智能家居是AI在日常生活中最常见的应用之一。通过语音识别和自然语言处理技术，用户可以用语音控制家里的灯光、空调、窗帘等设备。例如用户对音箱说"关闭灯光"，系统即可识别并执行。</div>
+        
+        <div class="a-h2">（二）自动驾驶技术 <span class="after-tag">Heading 2 自动编号</span></div>
+        <div class="a-body">自动驾驶是AI技术的集大成者，涉及计算机视觉、传感器融合、路径规划等多个领域。目前L3级别的自动驾驶已经在部分高端车型上实现量产。</div>
+        
+        <div class="a-ref-head">参考文献</div>
+        <div class="a-ref">[1] 张三. 人工智能导论[M]. 北京: 清华大学出版社, 2023.</div>
+        <div class="a-ref">[2] 李四, 王五. 深度学习在语音识别中的应用[J]. 计算机科学, 2024, 51(3): 45-52.</div>
+        <div class="a-ref">[3] JOHNSON J, ZHANG L. Autonomous driving systems[J]. IEEE Transactions on ITS, 2023, 24(5): 6789-6801.</div>
+        
+        <div class="page-num">— 1 —</div>
+        
+        <div style="margin-top: 20px; padding: 10px; background: #f0fff0; border: 1px solid #c0e0c0; border-radius: 4px;">
+          <div style="font-size: 10pt; color: #27ae60; font-weight: bold; margin-bottom: 6px;">优化汇总：</div>
+          <ul style="font-size: 10pt; color: #666; padding-left: 20px; line-height: 1.8;">
+            <li>字体规范：中文宋体，英文/数字 Times New Roman</li>
+            <li>字号统一：标题二号/四号，正文小四(12pt)</li>
+            <li>标题样式：应用 Heading 1/2/3，可生成目录</li>
+            <li>标题编号：自动添加"一、""（一）"层级编号</li>
+            <li>自动目录：插入 TOC 域，含页码和点状引导线</li>
+            <li>口语化修正："比如说"→"例如"，"得"→"的"</li>
+            <li>参考文献：统一 GB/T 7714-2015 格式，补全标识码</li>
+            <li>首行缩进2字符，1.5倍行距，两端对齐</li>
+            <li>页码分节：封面/目录罗马数字，正文阿拉伯数字</li>
+            <li>Word标题样式：支持右键"更新域"刷新目录</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
