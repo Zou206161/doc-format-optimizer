@@ -1,0 +1,119 @@
+{
+  "document_level": {
+    "page_width": 595.3,
+    "page_height": 841.9,
+    "margin_top": 72.0,
+    "margin_bottom": 72.0,
+    "margin_left": 90.0,
+    "margin_right": 90.0,
+    "header": "本科毕业论文",
+    "footer": null,
+    "default_font": {
+      "font_name": "Times New Roman",
+      "font_name_east_asia": "宋体",
+      "font_size": 12.0,
+      "bold": null,
+      "italic": null,
+      "underline": null,
+      "color": null
+    }
+  },
+  "styles": {
+    "Title": {
+      "font": {
+        "font_name": "SimHei",
+        "font_name_east_asia": "黑体",
+        "font_size": 22.0,
+        "bold": true,
+        "italic": null,
+        "underline": null,
+        "color": null
+      },
+      "paragraph": {
+        "alignment": "center",
+        "line_spacing": null,
+        "line_spacing_rule": null,
+        "space_before": null,
+        "space_after": null,
+        "first_line_indent": null,
+        "left_indent": null,
+        "right_indent": null
+      }
+    },
+    "Heading1": {
+      "font": {
+        "font_name": "SimHei",
+        "font_name_east_asia": "黑体",
+        "font_size": 16.0,
+        "bold": true,
+        "italic": null,
+        "underline": null,
+        "color": null
+      },
+      "paragraph": {
+        "alignment": "center",
+        "line_spacing": null,
+        "line_spacing_rule": null,
+        "space_before": 24.0,
+        "space_after": 18.0,
+        "first_line_indent": null,
+        "left_indent": null,
+        "right_indent": null
+      }
+    },
+    "Heading2": {
+      "font": {
+        "font_name": "SimHei",
+        "font_name_east_asia": "黑体",
+        "font_size": 14.0,
+        "bold": true,
+        "italic": null,
+        "underline": null,
+        "color": null
+      },
+      "paragraph": {
+        "alignment": "left",
+        "line_spacing": null,
+        "line_spacing_rule": null,
+        "space_before": 18.0,
+        "space_after": 12.0,
+        "first_line_indent": null,
+        "left_indent": null,
+        "right_indent": null
+      }
+    },
+    "Body": {
+      "font": {
+        "font_name": "Times New Roman",
+        "font_name_east_asia": "宋体",
+        "font_size": 12.0,
+        "bold": null,
+        "italic": null,
+        "underline": null,
+        "color": null
+      },
+      "paragraph": {
+        "alignment": "justify",
+        "line_spacing": 1.5,
+        "line_spacing_rule": null,
+        "space_before": 0.0,
+        "space_after": 0.0,
+        "first_line_indent": 24.0,
+        "left_indent": null,
+        "right_indent": null
+      }
+    }
+  },
+  "heading_numbering": {
+    "format": "decimal",
+    "separator": ".",
+    "levels": 3
+  },
+  "sources": {
+    "Title": "template",
+    "Heading1": "template",
+    "Heading2": "template",
+    "Body": "template",
+    "document_level": "template"
+  }
+}
