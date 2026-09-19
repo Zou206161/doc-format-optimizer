@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文档格式优化系统</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #4a6cf7;
+            --primary-dark: #3a5ce5;
+            --success: #28a745;
+            --success-dark: #218838;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --text-primary: #1a1a2e;
+            --text-secondary: #555;
+            --text-muted: #888;
+            --bg-page: #f5f7fa;
+            --bg-card: #ffffff;
+            --bg-muted: #f8f9fa;
+            --bg-hover: #f0f4ff;
+            --border: #e0e0e0;
+            --border-light: #eee;
+            --shadow: 0 2px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 4px 20px rgba(0,0,0,0.1);
+            --radius: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+            background: var(--bg-page);
+            color: var(--text-primary);
+            padding: 24px 16px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 28px;
+            color: var(--text-primary);
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card h2::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* Step indicator */
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            padding: 16px 20px;
+            background: var(--bg-muted);
+            border-radius: var(--radius);
+        }
+        .step-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #ddd;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .step-dot.active { background: var(--primary); }
+        .step-dot.done { background: var(--success); }
+        .step-label { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
+        .step-line { flex: 1; height: 3px; background: #ddd; border-radius: 2px; }
+
+        /* Tabs */
+        .tabs { display: flex; gap: 0; margin-bottom: 24px; border-radius: var(--radius); overflow: hidden; }
+        .tab {
+            flex: 1;
+            padding: 14px;
+            text-align: center;
+            cursor: pointer;
+            background: var(--bg-muted);
+            border: none;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+        .tab:hover { background: var(--bg-hover); color: var(--primary); }
+        .tab.active {
+            background: var(--primary);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* Form elements */
+        .form-group { margin-bottom: 18px; }
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+        .form-hint { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+        .form-label-sm {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .advanced-section {
+            margin: 16px 0;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .advanced-toggle {
+            padding: 12px 16px;
+            background: var(--bg-muted);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: background 0.2s;
+        }
+        .advanced-toggle:hover { background: var(--bg-hover); }
+        .advanced-panel {
+            padding: 16px;
+            border-top: 1px solid var(--border-light);
+        }
+        .advanced-panel .form-group { margin-bottom: 16px; }
+        .advanced-panel .form-group:last-child { margin-bottom: 0; }
+        textarea, input[type="file"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        textarea:focus, input[type="file"]:focus { outline: none; border-color: var(--primary); }
+        textarea { min-height: 140px; resize: vertical; font-family: inherit; line-height: 1.6; }
+        select {
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 14px;
+            background: #fff;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        select:focus { outline: none; border-color: var(--primary); }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 10px 28px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: var(--shadow); }
+        .btn:active { transform: translateY(0); }
+        .btn:disabled { background: #aaa; cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn-success { background: var(--success); }
+        .btn-success:hover { background: var(--success-dark); }
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        .btn-outline:hover { background: var(--bg-hover); }
+        .btn-sm { padding: 6px 16px; font-size: 13px; }
+
+        /* Status */
+        .status {
+            padding: 10px 16px;
+            border-radius: var(--radius);
+            margin-top: 14px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .status.info { background: #e7f0ff; color: #004085; border-left: 4px solid var(--primary); }
+        .status.success { background: #d4edda; color: #155724; border-left: 4px solid var(--success); }
+        .status.error { background: #f8d7da; color: #721c24; border-left: 4px solid var(--danger); }
+        .status.warning { background: #fff3cd; color: #856404; border-left: 4px solid var(--warning); }
+        .hidden { display: none !important; }
+
+        /* Preset card */
+        .preset-selector { display: flex; gap: 10px; align-items: flex-start; }
+        .preset-selector select { flex: 1; }
+        .preset-card {
+            margin-top: 12px;
+            background: linear-gradient(135deg, #f0f4ff 0%, #f8f9ff 100%);
+            border: 1px solid #d0d8ff;
+            border-radius: var(--radius);
+            padding: 16px;
+            transition: all 0.3s;
+        }
+        .preset-card.empty {
+            background: var(--bg-muted);
+            border: 1px dashed var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            padding: 20px;
+        }
+        .preset-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .preset-card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .preset-badge {
+            padding: 3px 10px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 11px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        .preset-card-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+        .preset-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+        .spec-item {
+            background: #fff;
+            padding: 8px 10px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .spec-label { font-size: 11px; color: var(--text-muted); margin-bottom: 3px; }
+        .spec-value { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+
+        /* Rule preview */
+        .rule-preview { margin-top: 20px; }
+        .rule-preview-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 14px;
+            border-bottom: 2px solid var(--border-light);
+        }
+        .rule-preview-tab {
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+        .rule-preview-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .rule-preview-tab:hover { color: var(--primary); }
+
+        /* Visual preview */
+        .visual-preview {
+            background: var(--bg-muted);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+        .page-preview {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 24px;
+            font-size: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-preview::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--primary);
+            opacity: 0.3;
+        }
+        .preview-header {
+            text-align: center;
+            font-size: 9px;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 6px;
+            margin-bottom: 12px;
+        }
+        .preview-title {
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 14px;
+            line-height: 1.4;
+        }
+        .preview-h1 {
+            font-weight: 700;
+            margin: 12px 0 8px;
+        }
+        .preview-h2 {
+            font-weight: 700;
+            margin: 10px 0 6px;
+        }
+        .preview-body {
+            text-align: justify;
+            line-height: 1.6;
+            margin-bottom: 6px;
+            font-size: 8px;
+        }
+        .preview-body::first-line {
+            /* visual hint for indent */
+        }
+        .preview-caption {
+            text-align: center;
+            font-size: 8px;
+            color: var(--text-secondary);
+            margin: 8px 0;
+        }
+        .preview-reference {
+            font-size: 7px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+        .preview-margin-indicator {
+            position: absolute;
+            background: rgba(74,108,247,0.08);
+            pointer-events: none;
+        }
+
+        /* Style cards grid */
+        .styles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .style-card {
+            background: #fff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 14px;
+            transition: all 0.2s;
+        }
+        .style-card:hover { border-color: var(--primary); box-shadow: 0 2px 8px rgba(74,108,247,0.1); }
+        .style-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .style-name { font-weight: 600; font-size: 14px; color: var(--text-primary); }
+        .style-sample {
+            padding: 8px;
+            background: var(--bg-muted);
+            border-radius: 6px;
+            margin-bottom: 10px;
+            text-align: center;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .style-props { font-size: 12px; color: var(--text-secondary); }
+        .style-prop { display: flex; justify-content: space-between; padding: 3px 0; }
+        .style-prop-label { color: var(--text-muted); }
+        .style-prop-value { font-weight: 500; color: var(--text-primary); }
+
+        /* JSON section */
+        .json-section { margin-top: 14px; }
+        .json-section details {
+            background: var(--bg-muted);
+            border-radius: var(--radius);
+            padding: 10px 14px;
+        }
+        .json-section summary {
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .json-section pre {
+            margin-top: 10px;
+            padding: 12px;
+            background: #1e1e2e;
+            color: #d4d4d4;
+            border-radius: 6px;
+            font-size: 11px;
+            line-height: 1.5;
+            overflow-x: auto;
+            max-height: 300px;
+            font-family: Consolas, Monaco, monospace;
+        }
+
+        /* Source badges */
+        .source-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+        .source-badge.template { background: #e7f0ff; color: #004085; }
+        .source-badge.textbox { background: #fff3cd; color: #856404; }
+        .source-badge.preset { background: #d4edda; color: #155724; }
+        .source-badge.default { background: #f0f0f0; color: #666; }
+
+        .result-area {
+            background: var(--bg-muted);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 18px;
+            margin-top: 16px;
+        }
+
+        /* Download area */
+        .download-area { margin-top: 18px; text-align: center; }
+        .download-area .btn { padding: 12px 32px; font-size: 16px; }
+
+        /* Text box info */
+        .textbox-info {
+            margin-top: 12px;
+            padding: 10px 14px;
+            background: #fff3cd;
+            border-radius: var(--radius);
+            font-size: 13px;
+            color: #856404;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .textbox-info-icon { font-size: 16px; line-height: 1; }
+
+        @media (max-width: 600px) {
+            .card { padding: 18px; }
+            h1 { font-size: 22px; }
+            .preset-specs { grid-template-columns: repeat(2, 1fr); }
+            .styles-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>文档格式优化系统</h1>
+
+    <!-- Step 1: Format Rule Generation -->
+    <div class="card">
+        <h2>第一步：生成格式规则 (rules.json)</h2>
+        <div class="step-indicator">
+            <div class="step-dot active" id="dot-1">1</div>
+            <span class="step-label">生成规则</span>
+            <div class="step-line"></div>
+            <div class="step-dot" id="dot-2">2</div>
+            <span class="step-label">优化并生成文档</span>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" id="tab-template" onclick="switchTab('template')">方式A：上传模板文档</button>
+            <button class="tab" id="tab-text" onclick="switchTab('text')">方式B：输入文字要求</button>
+        </div>
+
+        <!-- Method A: Template Upload -->
+        <div id="panel-template">
+            <div class="form-group">
+                <label class="form-label">上传模板文件</label>
+                <input type="file" id="template-file" accept=".docx,.doc">
+                <p class="form-hint">支持 .docx 和 .doc 格式，系统自动检测文本框批注（红色格式要求）</p>
+            </div>
+            <div id="textbox-info" class="textbox-info hidden">
+                <span class="textbox-info-icon">💡</span>
+                <span id="textbox-info-text">检测到文本框批注，已合并到格式规则中</span>
+            </div>
+            <button class="btn" id="btn-template" onclick="uploadTemplate()">提取格式规则</button>
+        </div>
+
+        <!-- Method B: Text Input -->
+        <div id="panel-text" class="hidden">
+            <div class="form-group">
+                <label class="form-label">选择预设模板</label>
+                <div class="preset-selector">
+                    <select id="preset-select" onchange="updatePresetCard()">
+                        <option value="">-- 选择预设模板 --</option>
+                    </select>
+                    <button class="btn" id="btn-preset" onclick="usePreset()">直接使用</button>
+                </div>
+                <div id="preset-card" class="preset-card empty">
+                    选择一个预设模板查看详细规格
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">或输入格式要求文字<span style="color:var(--text-muted);font-weight:400;">（可选，会覆盖预设）</span></label>
+                <textarea id="requirement-text" placeholder="例如：&#10;一级标题：黑体三号居中，段前段后各24磅&#10;正文：宋体小四，1.5倍行距，首行缩进2字符&#10;参考文献：五号宋体，悬挂缩进&#10;&#10;留空则直接使用上方选择的预设模板"></textarea>
+            </div>
+            <button class="btn" id="btn-text" onclick="parseText()">解析格式要求</button>
+        </div>
+
+        <div id="status-rules" class="status hidden"></div>
+        <div id="rules-result" class="result-area hidden">
+            <div class="rule-preview">
+                <div class="rule-preview-tabs">
+                    <div class="rule-preview-tab active" onclick="switchPreview('visual', this)">可视化预览</div>
+                    <div class="rule-preview-tab" onclick="switchPreview('styles', this)">样式详情</div>
+                    <div class="rule-preview-tab" onclick="switchPreview('json', this)">JSON 数据</div>
+                </div>
+                <div id="preview-visual">
+                    <div class="visual-preview">
+                        <div class="page-preview" id="page-preview">
+                            <!-- Filled by JS -->
+                        </div>
+                    </div>
+                </div>
+                <div id="preview-styles" class="hidden">
+                    <div class="styles-grid" id="styles-grid">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+                <div id="preview-json" class="hidden json-section">
+                    <details>
+                        <summary>展开查看完整 rules.json</summary>
+                        <pre id="rules-json"></pre>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 2: Content Optimization & Document Generation -->
+    <div class="card">
+        <h2>第二步：优化内容并生成成品文档</h2>
+
+        <div class="form-group">
+            <label class="form-label">上传待修改的草稿 .docx</label>
+            <input type="file" id="draft-file" accept=".docx">
+        </div>
+
+        <div class="form-group">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400;">
+                <input type="checkbox" id="skip-opt" style="width:auto;">
+                <span>跳过AI内容优化（仅套用格式）</span>
+            </label>
+            <p class="form-hint">跳过AI优化时，仅套用格式规则，不修改文本内容</p>
+        </div>
+
+        <div class="advanced-section">
+            <div class="advanced-toggle" onclick="toggleAdvanced()">
+                <span>⚙ 高级选项（标题编号 / 目录 / 页码分节）</span>
+                <span id="adv-arrow">▶</span>
+            </div>
+            <div id="advanced-panel" class="advanced-panel hidden">
+                <div class="form-group">
+                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500;">
+                        <input type="checkbox" id="opt-heading-numbering" style="width:auto;" onchange="updateHeadingNumbering()">
+                        <span>启用标题自动编号</span>
+                    </label>
+                    <div style="margin-top:8px;padding-left:24px;">
+                        <label class="form-label-sm">编号格式</label>
+                        <select id="opt-heading-format" onchange="updateHeadingNumbering()">
+                            <option value="chinese_upper">中文大写（一、（一）1.（1））</option>
+                            <option value="chinese_lower">中文小写</option>
+                            <option value="decimal">阿拉伯数字（1. 1.1 1.1.1）</option>
+                            <option value="decimal_dot">阿拉伯数字顿号（1、1.1、）</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500;">
+                        <input type="checkbox" id="opt-toc" style="width:auto;" onchange="updateTOC()">
+                        <span>自动生成目录</span>
+                    </label>
+                    <div style="margin-top:8px;padding-left:24px;">
+                        <label class="form-label-sm">目录深度</label>
+                        <select id="opt-toc-depth" onchange="updateTOC()">
+                            <option value="2">2级</option>
+                            <option value="3" selected>3级</option>
+                            <option value="4">4级</option>
+                        </select>
+                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin-top:8px;font-weight:400;">
+                            <input type="checkbox" id="opt-toc-newpage" style="width:auto;" onchange="updateTOC()">
+                            <span>目录单独一页</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500;">
+                        <input type="checkbox" id="opt-sections" style="width:auto;" onchange="updateSections()">
+                        <span>启用页码分节（封面/目录/正文不同页码）</span>
+                    </label>
+                    <div style="margin-top:8px;padding-left:24px;">
+                        <p class="form-hint">前页（封面、摘要、目录）用罗马数字页码，正文用阿拉伯数字从1开始</p>
+                        <label class="form-label-sm">页眉文字</label>
+                        <input type="text" id="opt-header-text" placeholder="如：硕士学位论文" onchange="updateSections()">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-success" id="btn-generate" onclick="generateDoc()">生成成品文档</button>
+
+        <div id="status-generate" class="status hidden"></div>
+        <div id="download-area" class="download-area hidden">
+            <a class="btn btn-success" id="download-link" href="#">⬇ 下载成品.docx</a>
+        </div>
+    </div>
+</div>
+
+<script>
+const API = '';
+
+let currentRules = null;
+let presetList = [];
+
+function showStatus(elId, msg, type) {
+    const el = document.getElementById(elId);
+    el.className = 'status ' + type;
+    el.textContent = msg;
+    el.classList.remove('hidden');
+}
+
+function switchTab(tab) {
+    document.getElementById('tab-template').classList.toggle('active', tab === 'template');
+    document.getElementById('tab-text').classList.toggle('active', tab === 'text');
+    document.getElementById('panel-template').classList.toggle('hidden', tab !== 'template');
+    document.getElementById('panel-text').classList.toggle('hidden', tab !== 'text');
+}
+
+function switchPreview(tab, el) {
+    document.querySelectorAll('.rule-preview-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('preview-visual').classList.toggle('hidden', tab !== 'visual');
+    document.getElementById('preview-styles').classList.toggle('hidden', tab !== 'styles');
+    document.getElementById('preview-json').classList.toggle('hidden', tab !== 'json');
+}
+
+async function loadPresets() {
+    try {
+        const resp = await fetch(API + '/api/rules/presets');
+        const data = await resp.json();
+        presetList = data.presets || [];
+        const sel = document.getElementById('preset-select');
+        presetList.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = p.name;
+            sel.appendChild(opt);
+        });
+    } catch (e) { /* ignore */ }
+}
+
+function updatePresetCard() {
+    const presetId = document.getElementById('preset-select').value;
+    const card = document.getElementById('preset-card');
+    if (!presetId) {
+        card.className = 'preset-card empty';
+        card.textContent = '选择一个预设模板查看详细规格';
+        return;
+    }
+    const preset = presetList.find(p => p.id === presetId);
+    if (!preset) return;
+
+    card.className = 'preset-card';
+    card.innerHTML = `
+        <div class="preset-card-header">
+            <span class="preset-card-title">${preset.name}</span>
+            <span class="preset-badge">国家标准</span>
+        </div>
+        <div class="preset-card-desc">${preset.description || ''}</div>
+        <div class="preset-specs">
+            <div class="spec-item">
+                <div class="spec-label">纸张</div>
+                <div class="spec-value">A4</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">正文字体</div>
+                <div class="spec-value">宋体</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">标题字体</div>
+                <div class="spec-value">黑体</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">标题字号</div>
+                <div class="spec-value">${getTitleSize(preset.id)}</div>
+            </div>
+        </div>
+    `;
+}
+
+function getTitleSize(presetId) {
+    const map = {
+        'undergraduate_thesis': '二号(22pt)',
+        'master_thesis': '小二(18pt)',
+        'doctoral_thesis': '二号(22pt)',
+        'journal_article': '三号(16pt)',
+    };
+    return map[presetId] || '-';
+}
+
+async function uploadTemplate() {
+    const fileInput = document.getElementById('template-file');
+    if (!fileInput.files[0]) { showStatus('status-rules', '请选择模板文件', 'error'); return; }
+
+    const btn = document.getElementById('btn-template');
+    btn.disabled = true;
+    showStatus('status-rules', '正在提取格式规则...', 'info');
+    document.getElementById('textbox-info').classList.add('hidden');
+
+    const fd = new FormData();
+    fd.append('file', fileInput.files[0]);
+
+    try {
+        const resp = await fetch(API + '/api/rules/from-template', { method: 'POST', body: fd });
+        const data = await resp.json();
+        if (data.error) { showStatus('status-rules', '错误: ' + data.error, 'error'); return; }
+        currentRules = data.rule_set;
+        syncAdvancedOptions();
+
+        let msg = '格式规则提取成功！';
+        if (data.has_textbox_requirements) {
+            document.getElementById('textbox-info').classList.remove('hidden');
+            document.getElementById('textbox-info-text').textContent =
+                `检测到 ${data.textbox_count} 个文本框批注，已合并到格式规则中`;
+            msg = '格式规则提取成功（含文本框批注）！';
+        }
+        showStatus('status-rules', msg, 'success');
+        displayRules(data.rule_set, data.sources);
+        markStep(1, true);
+    } catch (e) {
+        showStatus('status-rules', '请求失败: ' + e.message, 'error');
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+async function usePreset() {
+    const presetId = document.getElementById('preset-select').value;
+    if (!presetId) { showStatus('status-rules', '请先选择一个预设模板', 'error'); return; }
+
+    const btn = document.getElementById('btn-preset');
+    btn.disabled = true;
+    showStatus('status-rules', '正在加载预设模板...', 'info');
+
+    const fd = new FormData();
+    fd.append('preset_id', presetId);
+
+    try {
+        const resp = await fetch(API + '/api/rules/from-preset', { method: 'POST', body: fd });
+        const data = await resp.json();
+        if (data.error) { showStatus('status-rules', '错误: ' + data.error, 'error'); return; }
+        currentRules = data.rule_set;
+        syncAdvancedOptions();
+        showStatus('status-rules', `预设模板「${data.preset_name || presetId}」加载成功！`, 'success');
+        displayRules(data.rule_set, data.rule_set.sources);
+        markStep(1, true);
+    } catch (e) {
+        showStatus('status-rules', '请求失败: ' + e.message, 'error');
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+async function parseText() {
+    const text = document.getElementById('requirement-text').value.trim();
+    const presetId = document.getElementById('preset-select').value;
+
+    if (!text && !presetId) {
+        showStatus('status-rules', '请输入格式要求文字或选择一个预设模板', 'error');
+        return;
+    }
+
+    const btn = document.getElementById('btn-text');
+    btn.disabled = true;
+    showStatus('status-rules', '正在解析格式要求...', 'info');
+
+    const fd = new FormData();
+    fd.append('text', text);
+    if (presetId) fd.append('preset_id', presetId);
+
+    try {
+        const resp = await fetch(API + '/api/rules/from-text', { method: 'POST', body: fd });
+        const data = await resp.json();
+        if (data.error) { showStatus('status-rules', '错误: ' + data.error, 'error'); return; }
+        currentRules = data.rule_set;
+        syncAdvancedOptions();
+        showStatus('status-rules', '格式规则解析成功！', 'success');
+        displayRules(data.rule_set, data.rule_set.sources);
+        markStep(1, true);
+    } catch (e) {
+        showStatus('status-rules', '请求失败: ' + e.message, 'error');
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+function displayRules(rs, sources) {
+    sources = sources || {};
+    document.getElementById('rules-json').textContent = JSON.stringify(rs, null, 2);
+    document.getElementById('rules-result').classList.remove('hidden');
+
+    // Visual preview
+    renderVisualPreview(rs);
+    // Styles grid
+    renderStylesGrid(rs, sources);
+}
+
+function renderVisualPreview(rs) {
+    const dl = rs.document_level || {};
+    const styles = rs.styles || {};
+    const titleStyle = styles['Title'] || {};
+    const h1Style = styles['Heading1'] || {};
+    const h2Style = styles['Heading2'] || {};
+    const bodyStyle = styles['Body'] || {};
+    const refStyle = styles['Reference'] || {};
+
+    const titleFont = titleStyle.font || {};
+    const h1Font = h1Style.font || {};
+    const h2Font = h2Style.font || {};
+    const bodyFont = bodyStyle.font || {};
+    const refFont = refStyle.font || {};
+
+    const titlePara = titleStyle.paragraph || {};
+    const bodyPara = bodyStyle.paragraph || {};
+
+    // Scale: 1pt in real doc = ~0.5px in preview
+    const scale = 0.45;
+    const titleSize = Math.max(14, (titleFont.font_size || 22) * scale);
+    const h1Size = Math.max(12, (h1Font.font_size || 16) * scale);
+    const h2Size = Math.max(10, (h2Font.font_size || 14) * scale);
+    const bodySize = Math.max(8, (bodyFont.font_size || 12) * scale);
+
+    const preview = document.getElementById('page-preview');
+    preview.innerHTML = `
+        ${dl.header ? `<div class="preview-header">${escapeHtml(dl.header)}</div>` : ''}
+        <div class="preview-title" style="
+            font-size: ${titleSize}px;
+            font-family: ${titleFont.font_name_east_asia || '"Microsoft YaHei"'}, ${titleFont.font_name || 'serif'};
+            font-weight: ${titleFont.bold ? 700 : 400};
+            text-align: ${titlePara.alignment === 'center' ? 'center' : titlePara.alignment === 'right' ? 'right' : 'left'};
+            color: ${titleFont.color ? '#' + titleFont.color : '#000'};
+        ">论文标题示例</div>
+        <div class="preview-h1" style="
+            font-size: ${h1Size}px;
+            font-family: ${h1Font.font_name_east_asia || '"Microsoft YaHei"'}, ${h1Font.font_name || 'serif'};
+            font-weight: ${h1Font.bold ? 700 : 400};
+            text-align: ${(h1Style.paragraph||{}).alignment === 'center' ? 'center' : 'left'};
+        ">一、一级标题示例</div>
+        <div class="preview-body" style="
+            font-size: ${bodySize}px;
+            font-family: ${bodyFont.font_name_east_asia || 'SimSun'}, ${bodyFont.font_name || 'serif'};
+            text-indent: ${(bodyPara.first_line_indent || 0) * scale}px;
+            text-align: ${bodyPara.alignment || 'justify'};
+            line-height: ${bodyPara.line_spacing_rule === 'exact' ? (bodyPara.line_spacing * scale) + 'px' : (bodyPara.line_spacing || 1.5)};
+        ">这是正文内容的示例段落。正文字体通常使用宋体，字号为小四号或五号，首行缩进两个字符，行距为1.5倍或固定值20磅。段落两端对齐，段前段后间距为0。</div>
+        <div class="preview-h2" style="
+            font-size: ${h2Size}px;
+            font-family: ${h2Font.font_name_east_asia || '"Microsoft YaHei"'}, ${h2Font.font_name || 'serif'};
+            font-weight: ${h2Font.bold ? 700 : 400};
+            text-align: ${(h2Style.paragraph||{}).alignment === 'center' ? 'center' : 'left'};
+            padding-left: ${((h2Style.paragraph||{}).first_line_indent || 0) * scale}px;
+        ">（一）二级标题示例</div>
+        <div class="preview-body" style="
+            font-size: ${bodySize}px;
+            font-family: ${bodyFont.font_name_east_asia || 'SimSun'}, ${bodyFont.font_name || 'serif'};
+            text-indent: ${(bodyPara.first_line_indent || 0) * scale}px;
+            text-align: ${bodyPara.alignment || 'justify'};
+        ">二级标题下的正文内容继续展示格式效果。不同层级的标题和正文形成清晰的视觉层次，帮助读者快速定位信息。</div>
+        <div class="preview-caption" style="
+            font-size: ${Math.max(7, (refFont.font_size || 10.5) * scale)}px;
+            font-family: ${refFont.font_name_east_asia || 'SimSun'}, ${refFont.font_name || 'serif'};
+        ">图1 格式效果示意图</div>
+        <div class="preview-h1" style="
+            font-size: ${h1Size}px;
+            font-family: ${h1Font.font_name_east_asia || '"Microsoft YaHei"'}, ${h1Font.font_name || 'serif'};
+            font-weight: ${h1Font.bold ? 700 : 400};
+        ">参考文献</div>
+        <div class="preview-reference" style="
+            font-size: ${Math.max(7, (refFont.font_size || 10.5) * scale)}px;
+            font-family: ${refFont.font_name_east_asia || 'SimSun'}, ${refFont.font_name || 'serif'};
+            padding-left: ${((refStyle.paragraph||{}).left_indent || 24) * scale}px;
+            text-indent: -${((refStyle.paragraph||{}).left_indent || 24) * scale}px;
+        ">[1] 张三, 李四. 论文标题[J]. 期刊名称, 2024, 12(3): 45-60.</div>
+    `;
+}
+
+function renderStylesGrid(rs, sources) {
+    const styles = rs.styles || {};
+    const grid = document.getElementById('styles-grid');
+    let html = '';
+
+    const styleOrder = ['Title', 'Heading1', 'Heading2', 'Heading3', 'Body', 'Caption', 'Reference'];
+    const ordered = [...styleOrder.filter(k => styles[k]), ...Object.keys(styles).filter(k => !styleOrder.includes(k))];
+
+    for (const name of ordered) {
+        const style = styles[name];
+        const f = style.font || {};
+        const p = style.paragraph || {};
+        const source = sources[name] || '';
+        const sourceBadge = source ? `<span class="source-badge ${source}">${sourceLabel(source)}</span>` : '';
+
+        const sampleSize = Math.min(18, f.font_size ? f.font_size * 0.8 : 12);
+        const alignMap = { center: 'center', left: 'left', right: 'right', justify: 'justify' };
+
+        html += `
+        <div class="style-card">
+            <div class="style-card-header">
+                <span class="style-name">${styleNameZh(name)}</span>
+                ${sourceBadge}
+            </div>
+            <div class="style-sample" style="
+                font-size: ${sampleSize}px;
+                font-family: ${f.font_name_east_asia || 'SimSun'}, ${f.font_name || 'serif'};
+                font-weight: ${f.bold ? 700 : 400};
+                text-align: ${alignMap[p.alignment] || 'center'};
+                color: ${f.color ? '#' + f.color : '#333'};
+            ">${sampleText(name)}</div>
+            <div class="style-props">
+                <div class="style-prop">
+                    <span class="style-prop-label">字体</span>
+                    <span class="style-prop-value">${f.font_name_east_asia || f.font_name || '-'}</span>
+                </div>
+                <div class="style-prop">
+                    <span class="style-prop-label">字号</span>
+                    <span class="style-prop-value">${f.font_size ? f.font_size + 'pt (' + ptToChinese(f.font_size) + ')' : '-'}</span>
+                </div>
+                <div class="style-prop">
+                    <span class="style-prop-label">对齐</span>
+                    <span class="style-prop-value">${alignZh(p.alignment) || '-'}</span>
+                </div>
+                <div class="style-prop">
+                    <span class="style-prop-label">行距</span>
+                    <span class="style-prop-value">${formatLineSpacing(p.line_spacing, p.line_spacing_rule)}</span>
+                </div>
+                ${p.first_line_indent ? `
+                <div class="style-prop">
+                    <span class="style-prop-label">首行缩进</span>
+                    <span class="style-prop-value">${p.first_line_indent}pt</span>
+                </div>` : ''}
+            </div>
+        </div>`;
+    }
+    grid.innerHTML = html;
+}
+
+function styleNameZh(name) {
+    const map = {
+        Title: '大标题', Heading1: '一级标题', Heading2: '二级标题',
+        Heading3: '三级标题', Heading4: '四级标题', Body: '正文',
+        Caption: '图表标题', Reference: '参考文献', Abstract: '摘要',
+        Keywords: '关键词', TOC: '目录', Subtitle: '副标题',
+    };
+    return map[name] || name;
+}
+
+function sampleText(name) {
+    const map = {
+        Title: '论文标题', Heading1: '一、一级标题', Heading2: '（一）二级标题',
+        Heading3: '1. 三级标题', Heading4: '（1）四级标题',
+        Body: '正文内容示例文字', Caption: '图1 示例图',
+        Reference: '[1] 作者. 标题[J].', Abstract: '摘要内容...',
+        Keywords: '关键词：关键词1；关键词2',
+    };
+    return map[name] || name;
+}
+
+function ptToChinese(pt) {
+    const map = {
+        42: '初号', 36: '小初', 26: '一号', 24: '小一',
+        22: '二号', 18: '小二', 16: '三号', 15: '小三',
+        14: '四号', 12: '小四', 10.5: '五号', 9: '小五',
+        7.5: '六号', 6.5: '小六', 5.5: '七号', 5: '八号'
+    };
+    return map[pt] || Math.round(pt) + 'pt';
+}
+
+function alignZh(align) {
+    const map = { center: '居中', left: '左对齐', right: '右对齐', justify: '两端对齐' };
+    return map[align] || align;
+}
+
+function formatLineSpacing(val, rule) {
+    if (!val) return '-';
+    if (rule === 'exact') return '固定 ' + val + '磅';
+    if (rule === 'multiple' || !rule) return val + '倍';
+    return val;
+}
+
+function sourceLabel(src) {
+    const map = { template: '模板提取', textbox: '文本框批注', preset: '预设模板', default: '默认值', llm: 'AI解析' };
+    return map[src] || src;
+}
+
+function escapeHtml(s) {
+    const div = document.createElement('div');
+    div.textContent = s;
+    return div.innerHTML;
+}
+
+function markStep(step, done) {
+    if (step === 1 && done) {
+        document.getElementById('dot-1').classList.remove('active');
+        document.getElementById('dot-1').classList.add('done');
+        document.getElementById('dot-2').classList.add('active');
+    }
+}
+
+async function generateDoc() {
+    const fileInput = document.getElementById('draft-file');
+    if (!fileInput.files[0]) { showStatus('status-generate', '请选择草稿文件', 'error'); return; }
+    if (!currentRules) { showStatus('status-generate', '请先生成格式规则', 'error'); return; }
+
+    const btn = document.getElementById('btn-generate');
+    btn.disabled = true;
+    showStatus('status-generate', '正在优化内容并生成文档...', 'info');
+    document.getElementById('download-area').classList.add('hidden');
+
+    const fd = new FormData();
+    fd.append('file', fileInput.files[0]);
+    fd.append('rules_json', JSON.stringify(currentRules));
+    fd.append('skip_optimization', document.getElementById('skip-opt').checked);
+
+    try {
+        const resp = await fetch(API + '/api/optimize/generate', { method: 'POST', body: fd });
+        if (!resp.ok) {
+            const err = await resp.json();
+            showStatus('status-generate', '错误: ' + (err.error || resp.statusText), 'error');
+            return;
+        }
+        const blob = await resp.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.getElementById('download-link');
+        link.href = url;
+        link.download = '成品.docx';
+        document.getElementById('download-area').classList.remove('hidden');
+        showStatus('status-generate', '文档生成成功！点击下方按钮下载。', 'success');
+        document.getElementById('dot-2').classList.remove('active');
+        document.getElementById('dot-2').classList.add('done');
+    } catch (e) {
+        showStatus('status-generate', '请求失败: ' + e.message, 'error');
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+function toggleAdvanced() {
+    const panel = document.getElementById('advanced-panel');
+    const arrow = document.getElementById('adv-arrow');
+    panel.classList.toggle('hidden');
+    arrow.textContent = panel.classList.contains('hidden') ? '▶' : '▼';
+}
+
+function updateHeadingNumbering() {
+    if (!currentRules) return;
+    const enabled = document.getElementById('opt-heading-numbering').checked;
+    const fmt = document.getElementById('opt-heading-format').value;
+    if (!currentRules.heading_numbering) currentRules.heading_numbering = {};
+    currentRules.heading_numbering.enabled = enabled;
+    currentRules.heading_numbering.format = fmt;
+}
+
+function updateTOC() {
+    if (!currentRules) return;
+    const enabled = document.getElementById('opt-toc').checked;
+    const depth = parseInt(document.getElementById('opt-toc-depth').value);
+    const newPage = document.getElementById('opt-toc-newpage').checked;
+    if (!currentRules.toc) currentRules.toc = {};
+    currentRules.toc.enabled = enabled;
+    currentRules.toc.depth = depth;
+    currentRules.toc.new_page = newPage;
+}
+
+function updateSections() {
+    if (!currentRules) return;
+    const enabled = document.getElementById('opt-sections').checked;
+    const headerText = document.getElementById('opt-header-text').value.trim();
+
+    if (!currentRules.sections) currentRules.sections = { enabled: false, sections: [] };
+    currentRules.sections.enabled = enabled;
+
+    if (enabled && currentRules.sections.sections.length < 2) {
+        currentRules.sections.sections = [
+            {
+                name: "front_matter",
+                page_numbering_enabled: true,
+                page_numbering_format: "roman_lower",
+                page_numbering_start: 1,
+                header_text: headerText || null,
+            },
+            {
+                name: "main",
+                page_numbering_enabled: true,
+                page_numbering_format: "decimal",
+                page_numbering_start: 1,
+                header_text: headerText || null,
+            },
+        ];
+    } else if (enabled && currentRules.sections.sections.length >= 2) {
+        currentRules.sections.sections[0].header_text = headerText || null;
+        currentRules.sections.sections[1].header_text = headerText || null;
+    }
+}
+
+// Sync UI with currentRules when rules are loaded
+function syncAdvancedOptions() {
+    if (!currentRules) return;
+    // Heading numbering
+    const hn = currentRules.heading_numbering || {};
+    document.getElementById('opt-heading-numbering').checked = hn.enabled || false;
+    if (hn.format) document.getElementById('opt-heading-format').value = hn.format;
+    // TOC
+    const toc = currentRules.toc || {};
+    document.getElementById('opt-toc').checked = toc.enabled || false;
+    if (toc.depth) document.getElementById('opt-toc-depth').value = toc.depth;
+    if (toc.new_page != null) document.getElementById('opt-toc-newpage').checked = toc.new_page;
+    // Sections
+    const sec = currentRules.sections || {};
+    document.getElementById('opt-sections').checked = sec.enabled || false;
+    if (sec.sections && sec.sections.length >= 2 && sec.sections[0].header_text) {
+        document.getElementById('opt-header-text').value = sec.sections[0].header_text;
+    }
+}
+
+loadPresets();
+</script>
+</body>
+</html>
